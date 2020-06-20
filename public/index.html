@@ -2,11 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>App Name</title>
+  <title></title>
 </head>
 <body>
   <div id="app"></div>
   <script async>
+    // This is a convenience. You can also just set the title
+    // directly, assuming your product name just change all the time.
+    document.querySelector('title').innerText = require('electron').remote.app.name;
+
     require('../renderer');
   </script>
 </body>
