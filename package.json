@@ -1,0 +1,37 @@
+{
+  "name": "app-name",
+  "productName": "App Name",
+  "appId": "com.your-name.app-name",
+  "version": "1.0.0",
+  "description": "electron-template",
+  "main": "main.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "start": "electron-background .",
+    "dev": "electronmon .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/catdad/electron-template.git"
+  },
+  "author": "Kiril Vatev <vatev.1@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/catdad/electron-template/issues"
+  },
+  "homepage": "https://github.com/catdad/electron-template#readme",
+  "devDependencies": {
+    "electron": "^9.0.4",
+    "electron-background": "^1.0.0",
+    "electronmon": "^1.1.1",
+    "eslint": "^5.16.0"
+  },
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "fs-extra": "^9.0.1",
+    "lodash": "^4.17.15"
+  }
+}
