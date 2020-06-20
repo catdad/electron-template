@@ -1,0 +1,61 @@
+:root {
+  /* based on material dark ui layers
+   * https://material.io/design/color/dark-theme.html#properties
+   */
+  --00dp: #121212;  /*  0% opacity */
+  --01dp: #1d1d1d;  /*  5% opacity */
+  --02dp: #212121;  /*  7% opacity */
+  --03dp: #252525;  /*  8% opacity */
+  --04dp: #272727;  /*  9% opacity */
+  --06dp: #2d2d2d;  /* 11% opacity */
+  --08dp: #2e2e2e;  /* 12% opacity */
+  --12dp: #323232;  /* 14% opacity */
+  --16dp: #353535;  /* 15% opacity */
+  --24dp: #383838;  /* 16% opacity */
+  --32dp: #3d3d3d;  /* 18% opacity */
+  --48dp: #414141;  /* 20% opacity */
+  --64dp: #464646;  /* 22% opacity */
+  --96dp: #4d4d4d;  /* 25% opacity */
+  --128dp: #5a5a5a; /* 30% opacity */
+  --192dp: #656565; /* 35% opacity */
+  --256dp: #717171; /* 40% opacity */
+  --384dp: #7d7d7d; /* 45% opacity */
+  --512dp: #898989; /* 50% opacity */
+
+  --lvl1: var(--01dp);
+  --lvl2: var(--03dp);
+  --lvl3: var(--12dp);
+  --lvl4: var(--32dp);
+  --lvl5: var(--48dp);
+  --lvl6: var(--96dp);
+  --lvl7: var(--256dp);
+
+  --color-background: var(--lvl2);
+  --color-border: var(--lvl5);
+
+  --color-text: #dfdfdf;
+  --tab-height: 2rem;
+  --font-size: 16px;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-size: var(--font-size);
+  font-family: sans-serif;
+  min-height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.toastify.toastify.toastify {
+  width: 33%;
+  max-width: 400px;
+  text-align: center;
+  line-height: 1.2;
+}
