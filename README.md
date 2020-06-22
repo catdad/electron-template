@@ -8,7 +8,7 @@ Well... it's mostly because I couldn't find a started project that I actually wa
 
 In both of these cases, the user is barely ready to actually create an app once they have started. They can even create more problems than they solve. So instead, I started down the route and creating Electron applications from scratch. Several applications in, and I am finding that I need to copy paste some code every time I start a new one. This is that code.
 
-It will be very opinionated. If you are offended by opinions that are not your own, this is probably not the template for you.
+It will be very opinionated. If you are offended by opinions that are not your own, this is probably not the template for you. If you are interested in learning more about or discussing these choices, I will be in the [issues section](https://github.com/catdad/electron-template/issues/new).
 
 Now, let's explore it.
 
