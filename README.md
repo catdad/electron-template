@@ -12,6 +12,10 @@ It will be very opinionated. If you are offended by opinions that are not your o
 
 Now, let's explore it.
 
+## Getting started
+
+Let's get some easy things out of the way first. The very first thing you'll want to do when using this template is to change the name and appropriate data to point to you and your repo. To make it as easy as possible, all app-specific data is kept in `package.json` and this README. You will want to set all appropriate properties in the `package.json` file, such as `name`, `productName`, `appId`, `repository`, `author`, etc.
+
 ## Code Build
 
 Right off the bat... there isn't one. And it's a good thing. I'm not going to go into the history of why I hate builds here, but I will just posit taht you don't need one. Electron is the most cutting-edge browser with every latest feature combines with the most recent NodeJS runtime, all rolled into a single environment. If there is something you actually need, it is already there.
