@@ -36,7 +36,7 @@ A common problem in Electron apps is needing to communicate between the main and
 
 ## Testing
 
-TODO
+[`spectron`](https://www.npmjs.com/package/spectron) is included for testing, complete with helpers to start and stop the application, provide custom config, and print all logs when a test fails. If you'd like unit tests as well, feel free to add them in any way you'd like (I recommend [`mocha`](https://www.npmjs.com/package/mocha), since it's already used to run the `spectron` tests).
 
 ## Installer Build
 
