@@ -15,7 +15,7 @@ function App() {
   return html`
     <div class=app>
       <p>This is your app</p>
-      <div><button onclick=${count}>I count how many times you click me, ever</button> : ${value}</div>
+      <div><button onclick=${count}>I count how many times you click me, ever</button> : <span>${value}</span></div>
     </div>
   `;
 }
