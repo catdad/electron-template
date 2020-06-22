@@ -2,8 +2,7 @@ const { expect } = require('chai');
 
 const {
   start, stop,
-  waitForVisible, waitForElementCount, waitForThrowable,
-  elementAttribute
+  waitForVisible, waitForElementCount
 } = require('./lib/app-provider.js');
 const config = require('./lib/config-provider.js');
 
