@@ -22,9 +22,9 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "electron": "^9.0.4",
+    "electron": "^9.1.1",
     "electron-background": "^1.0.0",
-    "electronmon": "^1.1.1",
+    "electronmon": "^1.1.2",
     "eslint": "^5.16.0",
     "mocha": "^8.0.1",
     "spectron": "^11.0.0",
@@ -35,8 +35,8 @@
     "chalk": "^4.1.0",
     "fs-extra": "^9.0.1",
     "htm": "^3.0.4",
-    "lodash": "^4.17.15",
-    "preact": "^10.4.4",
+    "lodash": "^4.17.19",
+    "preact": "^10.4.6",
     "toastify-js": "^1.8.0"
   }
 }
