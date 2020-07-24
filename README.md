@@ -10,15 +10,15 @@ In both of these cases, the user is barely ready to actually create an app once 
 
 It will be very opinionated. If you are offended by opinions that are not your own, this is probably not the template for you. If you are interested in learning more about or discussing these choices, I will be in the [issues section](https://github.com/catdad/electron-template/issues/new).
 
-Now, let's explore it.
+Now, let's explore it!
 
 ## Getting started
 
 Let's get some easy things out of the way first. The very first thing you'll want to do when using this template is to change the name and appropriate data to point to you and your repo. To make it as easy as possible, all app-specific data is kept in `package.json` and this README. You will want to set all appropriate properties in the `package.json` file, such as `name`, `productName`, `appId`, `repository`, `author`, etc.
 
-## Code Build
+## Source Code Build
 
-Right off the bat... there isn't one. And it's a good thing. I'm not going to go into the history of why I hate builds here, but I will just posit taht you don't need one. Electron is the most cutting-edge browser with every latest feature combines with the most recent NodeJS runtime, all rolled into a single environment. If there is something you actually need, it is already there.
+Right off the bat... there isn't one. And it's a good thing. I'm not going to go into the history of why I hate builds here, but I will just posit taht you don't need one. Electron is the most cutting-edge browser with every latest feature combines with the most recent NodeJS runtime, all rolled into a single environment. If there is something you actually need, it is already there. The code will you write will be the actual code that is executed.
 
 ## UI Framework
 
@@ -38,6 +38,6 @@ A common problem in Electron apps is needing to communicate between the main and
 
 [`spectron`](https://www.npmjs.com/package/spectron) is included for testing, complete with helpers to start and stop the application, provide custom config, and print all logs when a test fails. If you'd like unit tests as well, feel free to add them in any way you'd like (I recommend [`mocha`](https://www.npmjs.com/package/mocha), since it's already used to run the `spectron` tests).
 
-## Installer Build
+## CI Build
 
-TODO
+This template comes with a [GitHub Actions](https://github.com/features/actions) workflow that will run your tests on Windows, MacOS, and Linux, create installers for all 3 operating systems, and provide them as artifacts on every build. When someone submits a pull request to your project, it will also do the same for the pull request. Whenever a tag is created, it will create a [GitHub Release](https://docs.github.com/en/enterprise/2.16/user/github/administering-a-repository/about-releases) and upload the all installers to that release. Basically... everything you might expect from a build.
