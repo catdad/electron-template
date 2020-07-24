@@ -44,7 +44,10 @@ jobs:
         with:
           node-version: 14.x
       - run: npm install
-      - run: npm test
+      - name: npm test
+        uses: GabrielBB/xvfb-action@v1.2
+        with:
+          run: npm test
       - run: npm run package
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
