@@ -43,11 +43,10 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 14.x
+      - run: sudo apt-get install xvfb
       - run: npm install
-      - name: npm test
-        uses: GabrielBB/xvfb-action@v1.2
-        with:
-          run: npm test
+      - name: Run npm test
+        run: xvfb-run --auto-servernum npm test
       - run: npm run package
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
