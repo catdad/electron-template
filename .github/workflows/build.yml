@@ -14,6 +14,7 @@ jobs:
         with:
           node-version: 14.x
       - run: npm install
+      - run: npm test
       - run: npm run package
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
@@ -28,6 +29,7 @@ jobs:
         with:
           node-version: 14.x
       - run: npm install
+      - run: npm test
       - run: npm run package
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
@@ -41,7 +43,10 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 14.x
+      - run: sudo apt-get install xvfb
       - run: npm install
+      - name: Run npm test
+        run: xvfb-run --auto-servernum npm test
       - run: npm run package
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
