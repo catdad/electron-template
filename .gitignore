@@ -40,3 +40,4 @@ coverage/
 # dev-time config file
 .*-config.json
 dist/
+out/

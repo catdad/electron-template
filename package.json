@@ -19,6 +19,9 @@
     "start": "electron-background .",
     "dev": "electronmon .",
     "test": "mocha --timeout 30000 --slow 0 \"test/**/*.test.js\"",
+    "postinstall": "npm run -s prep:icons",
+    "prep": "npm run -s prep:icons",
+    "prep:icons": "svg-app-icon --destination out < assets/icon.svg",
     "package": "run-script-os",
     "package:win32": "electron-builder --config .electron-builder.js --publish never --win",
     "package:darwin": "electron-builder --config .electron-builder.js --publish never --mac",
@@ -35,6 +38,7 @@
     "mocha": "^8.1.1",
     "run-script-os": "^1.1.1",
     "spectron": "^11.0.0",
+    "svg-app-icon": "^1.1.0",
     "tempy": "^0.5.0"
   },
   "dependencies": {
