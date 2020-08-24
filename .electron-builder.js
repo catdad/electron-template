@@ -15,11 +15,11 @@ module.exports = {
     target: [
       'dmg'
     ],
-//    icon: 'out/icon.icns',
+    icon: 'out/icon.icns',
     darkModeSupport: true
   },
   dmg: {
-//    icon: 'out/icon.icns',
+    icon: 'out/icon.icns',
     artifactName: `${fileName}-v\${version}-MacOS-setup.\${ext}`
   },
   win: {
@@ -27,7 +27,7 @@ module.exports = {
       'nsis',
       'portable'
     ],
-//    icon: 'out/icon.ico'
+    icon: 'out/icon.ico'
   },
   nsis: {
     artifactName: `${fileName}-v\${version}-Windows-setup.\${ext}`
@@ -36,15 +36,15 @@ module.exports = {
     artifactName: `${fileName}-v\${version}-Windows-portable.\${ext}`
   },
   linux: {
-//    icon: 'out/256x256.png',
+    icon: 'out/256x256.png',
     target: [
       'AppImage'
     ],
     executableName: productName,
     category: 'Network',
-//    asarUnpack: [
-//      'out/*.png'
-//    ]
+    asarUnpack: [
+      'out/*.png'
+    ]
   },
   appImage: {
     artifactName: `${fileName}-v\${version}-Linux.\${ext}`
