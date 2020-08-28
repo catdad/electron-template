@@ -64,10 +64,6 @@ function createWindow () {
       windowOptions.titleBarStyle = 'hidden';
     }
 
-    if (process.platform === 'linux') {
-      windowOptions.icon = './third-party/icon.png';
-    }
-
     // Create the browser window.
     mainWindow = new BrowserWindow(windowOptions);
 

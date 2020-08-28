@@ -18,16 +18,27 @@
   "scripts": {
     "start": "electron-background .",
     "dev": "electronmon .",
-    "test": "mocha --timeout 30000 --slow 0 \"test/**/*.test.js\""
+    "test": "mocha --timeout 30000 --slow 0 \"test/**/*.test.js\"",
+    "postinstall": "npm run -s prep:icons",
+    "prep": "npm run -s prep:icons",
+    "prep:icons": "svg-app-icon --destination icons < assets/icon.svg",
+    "package": "run-script-os",
+    "package:win32": "electron-builder --config .electron-builder.js --publish never --win",
+    "package:darwin": "electron-builder --config .electron-builder.js --publish never --mac",
+    "package:linux": "electron-builder --config .electron-builder.js --publish never --linux",
+    "package:default": "echo \"Error: this OS is not supported\" && exit 1"
   },
   "devDependencies": {
     "chai": "^4.2.0",
     "electron": "^9.1.1",
     "electron-background": "^1.0.0",
+    "electron-builder": "^22.7.0",
     "electronmon": "^1.1.2",
     "eslint": "^5.16.0",
-    "mocha": "^8.0.1",
+    "mocha": "^8.1.1",
+    "run-script-os": "^1.1.1",
     "spectron": "^11.1.0",
+    "svg-app-icon": "^1.1.0",
     "tempy": "^0.5.0"
   },
   "dependencies": {
