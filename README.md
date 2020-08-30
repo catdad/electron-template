@@ -34,9 +34,44 @@ During development, the config file will default to being created in the root di
 
 A common problem in Electron apps is needing to communicate between the main and renderer thread. However, [`electron.remote` is considered harmful](https://medium.com/@nornagon/electrons-remote-module-considered-harmful-70d69500f31). This template comes with a wrapper that allows exposing the same Promise-based API to both the main and all renderer threads while keeping your application responsive. See [`lib/isomorphic.js`](lib/isomorphic.js) and an example of how to use it in [`lib/config.js`](lib/config.js). Note that in these cases, all work is delegated to the main thread, keeping the renderer responsive and making this mechanism useful for work that must be done on the main thread anyway.
 
-## Testing
+## End-to-End Testing
 
-[`spectron`](https://www.npmjs.com/package/spectron) is included for testing, complete with helpers to start and stop the application, provide custom config, and print all logs when a test fails. If you'd like unit tests as well, feel free to add them in any way you'd like (I recommend [`mocha`](https://www.npmjs.com/package/mocha), since it's already used to run the `spectron` tests).
+[`spectron`](https://www.npmjs.com/package/spectron) is included for testing, complete with helpers to start and stop the application, provide custom config, and print all logs when a test fails.
+
+`spectron` includes a copy of [`webdriverio`](https://github.com/webdriverio/webdriverio/) for actually driving the application. You can access it like this within the tests:
+
+```javascript
+app.client.$('.my-selector-class');
+```
+
+However, this is all asynchronous (`webdriverio` doesn't really do a good job documenting this). This presents some caveats:
+
+```javascript
+// When webdriverio provides this example in the documentation:
+$(selector).getText();
+
+// What you actually have to do is:
+const $elem = await app.client.$(selector);
+const text = await $elem.getText();
+```
+
+This works in these tests. However, versions of [`webdriverio` 4](http://v4.webdriver.io/api.html) and earlier had a much better API for asynchronous code, that looked like this:
+
+```javascript
+const text = await browser.getText(selector);
+```
+
+There is a helper in the tests available in this template that largely allows you to still write tests with this form of API, like so:
+
+```javascript
+const text = await app.legacy.getText(selector);
+```
+
+You get to choose which one you want to use! If ever in doubt, or something isn't working correctly, you should lean toward using `app.client` along with the official `webdriverio` documentation.
+
+## Unit testing
+
+There is no unit testing framework. Feel free to add any framework you are happy with. I recommend [`mocha`](https://www.npmjs.com/package/mocha), since it's already used to run the `spectron` tests.
 
 ## CI Build
 

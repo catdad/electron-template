@@ -38,7 +38,7 @@ describe('[smoke tests]', () => {
     await waitForVisible('#app');
     await waitForElementCount('p', 1);
 
-    expect(await app.client.getText('#app p')).to.include('This is your app');
+    expect(await app.legacy.getText('#app p')).to.include('This is your app');
   });
 
   it('counts when clicking the button', async () => {
@@ -48,11 +48,11 @@ describe('[smoke tests]', () => {
     await waitForVisible('.app button');
 
     // maybe consider using better selectors, but you get the idea
-    expect(await app.client.getText('.app > div > span')).to.equal('0');
+    expect(await app.legacy.getText('.app > div > span')).to.equal('0');
 
-    await app.client.click('.app button');
+    await app.legacy.click('.app button');
 
-    expect(await app.client.getText('.app > div > span')).to.equal('1');
+    expect(await app.legacy.getText('.app > div > span')).to.equal('1');
   });
 
   it('loads the previously counted value', async () => {
@@ -64,10 +64,10 @@ describe('[smoke tests]', () => {
 
     await waitForVisible('#app button');
 
-    expect(await app.client.getText('.app > div > span')).to.equal('72');
+    expect(await app.legacy.getText('.app > div > span')).to.equal('72');
 
-    await app.client.click('.app button');
+    await app.legacy.click('.app button');
 
-    expect(await app.client.getText('.app > div > span')).to.equal('73');
+    expect(await app.legacy.getText('.app > div > span')).to.equal('73');
   });
 });

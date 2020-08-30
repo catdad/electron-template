@@ -56,6 +56,7 @@ function createWindow () {
         nodeIntegration: true,
         nodeIntegrationInWorker: true,
         webviewTag: true,
+        enableRemoteModule: true
       },
       frame: process.platform === 'darwin' ? true : !config.getProp('experiments.framelessWindow')
     };
