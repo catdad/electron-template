@@ -32,24 +32,24 @@ describe('[smoke tests]', () => {
     const configPath = await config.create({});
     const app = await start(configPath);
 
-    await app.waitForVisible('#app');
-    await app.waitForElementCount('p', 1);
+    await app.utils.waitForVisible('#app');
+    await app.utils.waitForElementCount('p', 1);
 
-    expect(await app.getText('#app p')).to.include('This is your app');
+    expect(await app.utils.getText('#app p')).to.include('This is your app');
   });
 
   it('counts when clicking the button', async () => {
     const configPath = await config.create({});
     const app = await start(configPath);
 
-    await app.waitForVisible('.app button');
+    await app.utils.waitForVisible('.app button');
 
     // maybe consider using better selectors, but you get the idea
-    expect(await app.getText('.app > div > span')).to.equal('0');
+    expect(await app.utils.getText('.app > div > span')).to.equal('0');
 
-    await app.click('.app button');
+    await app.utils.click('.app button');
 
-    expect(await app.getText('.app > div > span')).to.equal('1');
+    expect(await app.utils.getText('.app > div > span')).to.equal('1');
   });
 
   it('loads the previously counted value', async () => {
@@ -59,12 +59,12 @@ describe('[smoke tests]', () => {
     });
     const app = await start(configPath);
 
-    await app.waitForVisible('#app button');
+    await app.utils.waitForVisible('#app button');
 
-    expect(await app.getText('.app > div > span')).to.equal('72');
+    expect(await app.utils.getText('.app > div > span')).to.equal('72');
 
-    await app.click('.app button');
+    await app.utils.click('.app button');
 
-    expect(await app.getText('.app > div > span')).to.equal('73');
+    expect(await app.utils.getText('.app > div > span')).to.equal('73');
   });
 });

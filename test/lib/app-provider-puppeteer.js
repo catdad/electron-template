@@ -41,6 +41,38 @@ function isInView(containerBB, elBB) {
   ));
 }
 
+const utils = page => ({
+  click: async selector => {
+    const elem = await page.$(selector);
+    await elem.click();
+  },
+  getText: async selector => {
+    return await page.evaluate(s => document.querySelector(s).innerText, selector);
+  },
+  waitForVisible: async selector => {
+    const pageRect = await page.evaluate(() => document.body.parentElement.getBoundingClientRect());
+
+    await waitForThrowable(async () => {
+      const elemRect = await page.evaluate((s) => document.querySelector(s).getBoundingClientRect(), selector);
+
+      if (!isInView(pageRect, elemRect)) {
+        throw new Error(`element "${selector}" is still not visible`);
+      }
+    });
+  },
+  waitForElementCount: async (selector, count = 1) => {
+    await waitForThrowable(async () => {
+      const elements = await page.$$(selector);
+
+      if (elements.length === count) {
+        return;
+      }
+
+      throw new Error(`expected ${count} of element "${selector}" but found ${elements.length}`);
+    });
+  }
+});
+
 let _stop;
 
 const start = async (configPath = '') => {
@@ -94,35 +126,7 @@ const start = async (configPath = '') => {
   const api = {
     page,
     pages,
-    click: async selector => {
-      const elem = await page.$(selector);
-      await elem.click();
-    },
-    getText: async selector => {
-      return await page.evaluate(s => document.querySelector(s).innerText, selector);
-    },
-    waitForVisible: async selector => {
-      const pageRect = await page.evaluate(() => document.body.parentElement.getBoundingClientRect());
-
-      await waitForThrowable(async () => {
-        const elemRect = await page.evaluate((s) => document.querySelector(s).getBoundingClientRect(), selector);
-
-        if (!isInView(pageRect, elemRect)) {
-          throw new Error(`element "${selector}" is still not visible`);
-        }
-      });
-    },
-    waitForElementCount: async (selector, count = 1) => {
-      await waitForThrowable(async () => {
-        const elements = await page.$$(selector);
-
-        if (elements.length === count) {
-          return;
-        }
-
-        throw new Error(`expected ${count} of element "${selector}" but found ${elements.length}`);
-      });
-    }
+    utils: utils(page)
   };
 
   return api;
