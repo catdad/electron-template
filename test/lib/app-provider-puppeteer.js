@@ -13,10 +13,39 @@ const args = process.env.UNSAFE_CI ?
   ['--no-sandbox', '--disable-setuid-sandbox', '.'] :
   ['.'];
 
+const waitForThrowable = async func => {
+  const end = Date.now() + (1000 * 2);
+  let error;
+
+  while (Date.now() < end) {
+    await sleep(5);
+
+    try {
+      return await func();
+    } catch (e) {
+      error = e;
+    }
+  }
+
+  if (error) {
+    throw error;
+  }
+};
+
+function isInView(containerBB, elBB) {
+  return (!(
+    elBB.top >= containerBB.bottom ||
+    elBB.left >= containerBB.right ||
+    elBB.bottom <= containerBB.top ||
+    elBB.right <= containerBB.left
+  ));
+}
+
 let _stop;
 
 const start = async (configPath = '') => {
   const port = await getPort();
+  let stopped = false;
 
   const proc = spawn(electron, [`--remote-debugging-port=${port}`, ...args], {
     stdio: ['ignore', 'pipe', 'pipe'],
@@ -27,10 +56,18 @@ const start = async (configPath = '') => {
   });
 
   proc.on('exit', code => {
+    if (stopped) {
+      return;
+    }
+
     /* eslint-disable-next-line no-console */
     console.error('[electron process]', `exited with code: ${code}`);
   });
   proc.on('error', err => {
+    if (stopped) {
+      return;
+    }
+
     /* eslint-disable-next-line no-console */
     console.error('[electron process]', err);
   });
@@ -43,8 +80,10 @@ const start = async (configPath = '') => {
 
   const browser = await puppeteer.connect({ browserURL: `http://localhost:${port}` });
   const pages = await browser.pages();
+  const page = pages[0];
 
   _stop = async () => {
+    stopped = true;
     await browser.disconnect();
     proc.kill();
 
@@ -52,7 +91,41 @@ const start = async (configPath = '') => {
     _stop = null;
   };
 
-  return pages[0];
+  const api = {
+    page,
+    pages,
+    click: async selector => {
+      const elem = await page.$(selector);
+      await elem.click();
+    },
+    getText: async selector => {
+      return await page.evaluate(s => document.querySelector(s).innerText, selector);
+    },
+    waitForVisible: async selector => {
+      const pageRect = await page.evaluate(() => document.body.parentElement.getBoundingClientRect());
+
+      await waitForThrowable(async () => {
+        const elemRect = await page.evaluate((s) => document.querySelector(s).getBoundingClientRect(), selector);
+
+        if (!isInView(pageRect, elemRect)) {
+          throw new Error(`element "${selector}" is still not visible`);
+        }
+      });
+    },
+    waitForElementCount: async (selector, count = 1) => {
+      await waitForThrowable(async () => {
+        const elements = await page.$$(selector);
+
+        if (elements.length === count) {
+          return;
+        }
+
+        throw new Error(`expected ${count} of element "${selector}" but found ${elements.length}`);
+      });
+    }
+  };
+
+  return api;
 };
 
 const stop = async () => {
