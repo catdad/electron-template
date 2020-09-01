@@ -14,8 +14,8 @@ const args = process.env.UNSAFE_CI ?
   ['--no-sandbox', '--disable-setuid-sandbox', '.'] :
   ['.'];
 
-const waitForThrowable = async func => {
-  const end = Date.now() + (1000 * 2);
+const waitForThrowable = async (func, waitMs = 2000) => {
+  const end = Date.now() + waitMs;
   let error;
 
   while (Date.now() < end) {
@@ -140,7 +140,7 @@ const start = async (configPath = '') => {
 
     const json = JSON.parse(await res.text());
     browserWSEndpoint = json.webSocketDebuggerUrl;
-  });
+  }, 4000);
 
   browser = await puppeteer.connect({ browserWSEndpoint });
   const pages = await browser.pages();
