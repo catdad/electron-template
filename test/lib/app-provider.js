@@ -77,10 +77,26 @@ const utils = page => ({
 let _stop;
 
 const start = async (configPath = '') => {
+  let app, browser, stopped = false;
   const port = await getPort();
-  let stopped = false;
 
-  const proc = spawn(electron, [`--remote-debugging-port=${port}`, ...args], {
+  _stop = async () => {
+    stopped = true;
+
+    if (browser) {
+      await browser.disconnect();
+    }
+
+    if (app) {
+      app.kill();
+
+      await new Promise(r => app.once('exit', () => r()));
+    }
+
+    _stop = null;
+  };
+
+  app = spawn(electron, [`--remote-debugging-port=${port}`, ...args], {
     stdio: ['ignore', 'pipe', 'pipe'],
     cwd: path.resolve(__dirname, '../..'),
     env: {
@@ -90,7 +106,7 @@ const start = async (configPath = '') => {
     }
   });
 
-  proc.on('exit', code => {
+  app.on('exit', code => {
     if (stopped) {
       return;
     }
@@ -98,7 +114,7 @@ const start = async (configPath = '') => {
     /* eslint-disable-next-line no-console */
     console.error('[electron process]', `exited with code: ${code}`);
   });
-  proc.on('error', err => {
+  app.on('error', err => {
     if (stopped) {
       return;
     }
@@ -110,8 +126,8 @@ const start = async (configPath = '') => {
   const stdout = [];
   const stderr = [];
 
-  proc.stdout.on('data', chunk => stdout.push(chunk));
-  proc.stderr.on('data', chunk => stderr.push(chunk));
+  app.stdout.on('data', chunk => stdout.push(chunk));
+  app.stderr.on('data', chunk => stderr.push(chunk));
 
   let browserWSEndpoint;
 
@@ -126,18 +142,9 @@ const start = async (configPath = '') => {
     browserWSEndpoint = json.webSocketDebuggerUrl;
   });
 
-  const browser = await puppeteer.connect({ browserWSEndpoint });
+  browser = await puppeteer.connect({ browserWSEndpoint });
   const pages = await browser.pages();
   const page = pages[0];
-
-  _stop = async () => {
-    stopped = true;
-    await browser.disconnect();
-    proc.kill();
-
-    await new Promise(r => proc.once('exit', () => r()));
-    _stop = null;
-  };
 
   const api = {
     page,
@@ -150,9 +157,7 @@ const start = async (configPath = '') => {
 
 const stop = async () => {
   if (_stop) {
-    await _stop().finally(() => {
-      _stop = null;
-    });
+    await _stop();
   }
 };
 
