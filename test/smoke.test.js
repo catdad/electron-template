@@ -28,6 +28,8 @@ describe('[smoke tests]', () => {
   beforeEach(cleanup);
   afterEach(cleanup);
 
+  for (let i = 0; i < 30; i++) {
+
   it('opens the application', async () => {
     const configPath = await config.create({});
     const app = await start(configPath);
@@ -67,4 +69,6 @@ describe('[smoke tests]', () => {
 
     expect(await app.utils.getText('.app > div > span')).to.equal('73');
   });
+
+  }
 });
