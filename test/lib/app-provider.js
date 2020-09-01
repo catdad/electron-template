@@ -88,7 +88,7 @@ const start = async (configPath = '') => {
 
     if (printLogs) {
       const logs = stdchunks.map(c => c.toString()).map(str => {
-        const clean = str.replace(/^\[[0-9:\/.]+INFO:CONSOLE\([0-9]+\)\]\s{0,}/, '');
+        const clean = str.replace(/^\[[0-9:/.]+INFO:CONSOLE\([0-9]+\)\]\s{0,}/, '');
 
         return clean === str ? chalk.yellow(str) : chalk.cyan(clean);
       }).join('');
@@ -151,11 +151,15 @@ const start = async (configPath = '') => {
 
     const json = JSON.parse(await res.text());
     browserWSEndpoint = json.webSocketDebuggerUrl;
-  }, 4000);
+  }, 6000);
 
   browser = await puppeteer.connect({ browserWSEndpoint, dumpio: true });
   const pages = await browser.pages();
   const page = pages[0];
+
+  if (!page) {
+    throw new Error('did not find a renderer when connecting to app');
+  }
 
   const api = {
     page,
