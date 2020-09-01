@@ -1,6 +1,6 @@
 const { expect } = require('chai');
 
-const { start, stop } = require('./lib/app-provider-puppeteer.js');
+const { start, stop } = require('./lib/app-provider.js');
 const config = require('./lib/config-provider.js');
 
 describe('[smoke tests]', () => {
