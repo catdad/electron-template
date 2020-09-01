@@ -4,7 +4,6 @@ const path = require('path');
 const puppeteer = require('puppeteer-core');
 const getPort = require('get-port');
 const electron = require('electron');
-const fetch = require('node-fetch');
 
 const pkg = require('../../package.json');
 const configVar = `${pkg.name.toUpperCase().replace(/-/g, '_')}_CONFIG_PATH`;
@@ -84,6 +83,8 @@ const start = async (configPath = '') => {
     stdio: ['ignore', 'pipe', 'pipe'],
     cwd: path.resolve(__dirname, '../..'),
     env: {
+      // using all existing env variables is required for Linux
+      ...process.env,
       [configVar]: configPath
     }
   });
@@ -111,20 +112,7 @@ const start = async (configPath = '') => {
   proc.stdout.on('data', chunk => stdout.push(chunk));
   proc.stderr.on('data', chunk => stderr.push(chunk));
 
-  let browserWSEndpoint;
-
-  await waitForThrowable(async () => {
-    const res = await fetch(`http://localhost:${port}/json/version`);
-
-    if (!res.ok) {
-      throw new Error(`BAD /json/version respose: ${res.status} "${res.statusText}"`);
-    }
-
-    const json = JSON.parse(await res.text());
-    browserWSEndpoint = json.webSocketDebuggerUrl;
-  });
-
-  const browser = await puppeteer.connect({ browserWSEndpoint });
+  const browser = await puppeteer.connect({ browserURL: `http://localhost:${port}` });
   const pages = await browser.pages();
   const page = pages[0];
 
