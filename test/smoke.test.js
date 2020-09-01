@@ -17,7 +17,7 @@ describe('[smoke tests]', () => {
   };
 
   async function cleanup() {
-    const includeLogs = this.currentTest.state === 'failed';
+    const includeLogs = this.currentTest.state === 'failed' || process.env.VERBOSE;
 
     await all(
       stop(includeLogs),
