@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
+    "chalk": "^4.1.0",
     "electron": "^9.1.1",
     "electron-background": "^1.0.0",
     "electron-builder": "^22.7.0",
@@ -45,7 +46,6 @@
   },
   "dependencies": {
     "callsites": "^3.1.0",
-    "chalk": "^4.1.0",
     "fs-extra": "^9.0.1",
     "htm": "^3.0.4",
     "lodash": "^4.17.19",

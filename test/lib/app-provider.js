@@ -5,6 +5,7 @@ const puppeteer = require('puppeteer-core');
 const getPort = require('get-port');
 const electron = require('electron');
 const fetch = require('node-fetch');
+const chalk = require('chalk');
 
 const pkg = require('../../package.json');
 const configVar = `${pkg.name.toUpperCase().replace(/-/g, '_')}_CONFIG_PATH`;
@@ -80,9 +81,21 @@ let _stop;
 const start = async (configPath = '') => {
   let app, browser, stopped = false;
   const port = await getPort();
+  const stdchunks = [];
 
-  _stop = async () => {
+  _stop = async (printLogs) => {
     stopped = true;
+
+    if (printLogs) {
+      const logs = stdchunks.map(c => c.toString()).map(str => {
+        const clean = str.replace(/^\[[0-9:\/.]+INFO:CONSOLE\([0-9]+\)\]\s{0,}/, '');
+
+        return clean === str ? chalk.yellow(str) : chalk.cyan(clean);
+      }).join('');
+
+      /* eslint-disable-next-line no-console */
+      console.log(logs);
+    }
 
     if (browser) {
       await browser.disconnect();
@@ -97,7 +110,7 @@ const start = async (configPath = '') => {
     _stop = null;
   };
 
-  app = spawn(electron, [`--remote-debugging-port=${port}`, ...args], {
+  app = spawn(electron, [`--remote-debugging-port=${port}`, '--enable-logging', '-v=0', ...args], {
     stdio: ['ignore', 'pipe', 'pipe'],
     cwd: path.resolve(__dirname, '../..'),
     env: {
@@ -124,11 +137,8 @@ const start = async (configPath = '') => {
     console.error('[electron process]', err);
   });
 
-  const stdout = [];
-  const stderr = [];
-
-  app.stdout.on('data', chunk => stdout.push(chunk));
-  app.stderr.on('data', chunk => stderr.push(chunk));
+  app.stdout.on('data', chunk => stdchunks.push(chunk));
+  app.stderr.on('data', chunk => stdchunks.push(chunk));
 
   let browserWSEndpoint;
 
@@ -143,7 +153,7 @@ const start = async (configPath = '') => {
     browserWSEndpoint = json.webSocketDebuggerUrl;
   }, 4000);
 
-  browser = await puppeteer.connect({ browserWSEndpoint });
+  browser = await puppeteer.connect({ browserWSEndpoint, dumpio: true });
   const pages = await browser.pages();
   const page = pages[0];
 
@@ -156,9 +166,9 @@ const start = async (configPath = '') => {
   return api;
 };
 
-const stop = async () => {
+const stop = async (...args) => {
   if (_stop) {
-    await _stop();
+    await _stop(...args);
   }
 };
 
