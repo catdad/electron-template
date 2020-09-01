@@ -43,6 +43,7 @@ function isInView(containerBB, elBB) {
 }
 
 const utils = page => ({
+  waitForThrowable,
   click: async selector => {
     const elem = await page.$(selector);
     await elem.click();
