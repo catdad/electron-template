@@ -17,22 +17,6 @@ const args = process.env.UNSAFE_CI ?
   ['--no-sandbox', '--disable-setuid-sandbox', '.'] :
   ['.'];
 
-// args from spectron/webdriverio
-const alwaysargs = [
-  '--disable-background-networking',
-  '--disable-client-side-phishing-detection',
-  '--disable-default-apps',
-  '--disable-hang-monitor',
-  '--disable-popup-blocking',
-  '--disable-prompt-on-repost',
-  '--disable-sync',
-  '--enable-automation',
-  '--enable-blink-features=ShadowDOMV0',
-  '--no-first-run',
-  '--password-store=basic',
-  '--use-mock-keychain' ,
-];
-
 const waitForThrowable = async (func, waitMs = 2000) => {
   const end = Date.now() + waitMs;
   let error;
@@ -139,7 +123,6 @@ const start = async (configPath = '') => {
     '--enable-logging',
     '-v=0',
     `--user-data-dir=${userData}`,
-    ...alwaysargs,
     ...args
   ], {
     stdio: ['ignore', 'pipe', 'pipe'],
@@ -147,7 +130,8 @@ const start = async (configPath = '') => {
     env: {
       // using all existing env variables is required for Linux
       ...process.env,
-      [configVar]: configPath
+      [configVar]: configPath,
+      LIBGL_ALWAYS_INDIRECT: 1
     }
   });
 
