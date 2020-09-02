@@ -129,8 +129,7 @@ const start = async (configPath = '') => {
     cwd: path.resolve(__dirname, '../..'),
     env: {
       // using all existing env variables is required for Linux
-      // ...process.env,
-      DISPLAY: process.env.DISPLAY,
+      ...process.env,
       [configVar]: configPath
     }
   });
