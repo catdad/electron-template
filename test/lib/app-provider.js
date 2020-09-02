@@ -6,6 +6,8 @@ const getPort = require('get-port');
 const electron = require('electron');
 const fetch = require('node-fetch');
 const chalk = require('chalk');
+const fs = require('fs-extra');
+const tempy = require('tempy');
 
 const pkg = require('../../package.json');
 const configVar = `${pkg.name.toUpperCase().replace(/-/g, '_')}_CONFIG_PATH`;
@@ -80,6 +82,8 @@ let _stop;
 
 const start = async (configPath = '') => {
   let app, browser, stopped = false;
+  const userData = tempy.directory();
+  await fs.ensureDir(userData);
   const port = await getPort();
   const stdchunks = [];
 
@@ -99,18 +103,28 @@ const start = async (configPath = '') => {
 
     if (browser) {
       await browser.disconnect();
+      browser = null;
     }
 
     if (app) {
       app.kill();
 
       await new Promise(r => app.once('exit', () => r()));
+      app = null;
     }
+
+    await fs.remove(userData);
 
     _stop = null;
   };
 
-  app = spawn(electron, [`--remote-debugging-port=${port}`, '--enable-logging', '-v=0', ...args], {
+  app = spawn(electron, [
+    `--remote-debugging-port=${port}`,
+    '--enable-logging',
+    '-v=0',
+    `--user-data-dir=${userData}`,
+    ...args
+  ], {
     stdio: ['ignore', 'pipe', 'pipe'],
     cwd: path.resolve(__dirname, '../..'),
     env: {
