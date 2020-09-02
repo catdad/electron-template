@@ -17,12 +17,14 @@ const args = process.env.UNSAFE_CI ?
   ['--no-sandbox', '--disable-setuid-sandbox', '.'] :
   ['.'];
 
-const waitForThrowable = async (func, waitMs = 2000) => {
-  const end = Date.now() + waitMs;
+const waitForThrowable = async (func, { interval = 5, total = 2000, count = Infinity } = {}) => {
+  const end = Date.now() + total;
   let error;
+  let c = 0;
 
-  while (Date.now() < end) {
-    await sleep(5);
+  while (Date.now() < end || c < count) {
+    c += 1;
+    await sleep(interval);
 
     try {
       return await func();
@@ -83,9 +85,24 @@ let _stop;
 const start = async (configPath = '') => {
   let app, browser, stopped = false;
   const userData = tempy.directory();
-  await fs.ensureDir(userData);
   const port = await getPort();
   const stdchunks = [];
+
+  const stopApp = async () => {
+    if (app) {
+      app.kill();
+
+      await new Promise(r => app.once('exit', () => r()));
+      app = null;
+    }
+  };
+
+  const stopBrowser = async () => {
+    if (browser) {
+      await browser.disconnect();
+      browser = null;
+    }
+  };
 
   _stop = async (printLogs) => {
     stopped = true;
@@ -101,58 +118,65 @@ const start = async (configPath = '') => {
       console.log(logs);
     }
 
-    if (browser) {
-      await browser.disconnect();
-      browser = null;
-    }
-
-    if (app) {
-      app.kill();
-
-      await new Promise(r => app.once('exit', () => r()));
-      app = null;
-    }
-
+    await stopBrowser();
+    await stopApp();
     await fs.remove(userData);
 
     _stop = null;
   };
 
-  app = spawn(electron, [
-    `--remote-debugging-port=${port}`,
-    '--enable-logging',
-    '-v=0',
-    `--user-data-dir=${userData}`,
-    ...args
-  ], {
-    stdio: ['ignore', 'pipe', 'pipe'],
-    cwd: path.resolve(__dirname, '../..'),
-    env: {
-      // using all existing env variables is required for Linux
-      ...process.env,
-      [configVar]: configPath
-    }
-  });
+  await waitForThrowable(async () => {
+    await stopApp();
+    await fs.remove(userData);
+    await fs.ensureDir(userData);
 
-  app.on('exit', code => {
-    if (stopped) {
-      return;
-    }
+    app = spawn(electron, [
+      `--remote-debugging-port=${port}`,
+      '--enable-logging',
+      '-v=0',
+      `--user-data-dir=${userData}`,
+      ...args
+    ], {
+      stdio: ['ignore', 'pipe', 'pipe'],
+      cwd: path.resolve(__dirname, '../..'),
+      env: {
+        // using all existing env variables is required for Linux
+        ...process.env,
+        [configVar]: configPath
+      }
+    });
 
-    /* eslint-disable-next-line no-console */
-    console.error('[electron process]', `exited with code: ${code}`);
-  });
-  app.on('error', err => {
-    if (stopped) {
-      return;
-    }
+    app.on('exit', code => {
+      if (stopped) {
+        return;
+      }
 
-    /* eslint-disable-next-line no-console */
-    console.error('[electron process]', err);
-  });
+      /* eslint-disable-next-line no-console */
+      console.error('[electron process]', `exited with code: ${code}`);
+    });
+    app.on('error', err => {
+      if (stopped) {
+        return;
+      }
 
-  app.stdout.on('data', chunk => stdchunks.push(chunk));
-  app.stderr.on('data', chunk => stdchunks.push(chunk));
+      /* eslint-disable-next-line no-console */
+      console.error('[electron process]', err);
+    });
+
+    app.stdout.on('data', chunk => stdchunks.push(chunk));
+    app.stderr.on('data', chunk => stdchunks.push(chunk));
+
+    // watch for the logged message:
+    // DevTools listening on ws://127.0.0.1:60030/devtools/browser/973afdb7-00af-4311-9663-c8833d51febb
+    await waitForThrowable(async () => {
+      const startedStr = stdchunks.map(c => c.toString()).join('').indexOf(`:${port}/devtools/`);
+
+      if (startedStr < 0) {
+        throw new Error('devtools not listening yet');
+      }
+    }, { total: 3000 });
+
+  }, { count: 3 });
 
   let browserWSEndpoint;
 
@@ -165,15 +189,24 @@ const start = async (configPath = '') => {
 
     const json = JSON.parse(await res.text());
     browserWSEndpoint = json.webSocketDebuggerUrl;
-  }, 6000);
+  }, { total: 6000 });
 
-  browser = await puppeteer.connect({ browserWSEndpoint, dumpio: true });
-  const pages = await browser.pages();
-  const page = pages[0];
+  const { page, pages } = await waitForThrowable(async () => {
+    if (browser) {
+      await browser.disconnect();
+      browser = null;
+    }
 
-  if (!page) {
-    throw new Error('did not find a renderer when connecting to app');
-  }
+    browser = await puppeteer.connect({ browserWSEndpoint, dumpio: true });
+    const pages = await browser.pages();
+    const page = pages[0];
+
+    if (!page) {
+      throw new Error('did not find a renderer when connecting to app');
+    }
+
+    return { pages, page };
+  });
 
   const api = {
     page,
