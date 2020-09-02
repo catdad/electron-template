@@ -3,7 +3,7 @@ const { expect } = require('chai');
 const { start, stop } = require('./lib/app-provider.js');
 const config = require('./lib/config-provider.js');
 
-describe('[smoke tests]', () => {
+let c = 30; while (c--) describe('[smoke tests]', () => {
   const all = async (...promises) => {
     let err;
 
@@ -27,8 +27,6 @@ describe('[smoke tests]', () => {
 
   beforeEach(cleanup);
   afterEach(cleanup);
-
-  for (let i = 0; i < 30; i++) {
 
   it('opens the application', async () => {
     const configPath = await config.create({});
@@ -69,6 +67,4 @@ describe('[smoke tests]', () => {
 
     expect(await app.utils.getText('.app > div > span')).to.equal('73');
   });
-
-  }
 });
