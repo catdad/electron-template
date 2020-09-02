@@ -13,7 +13,7 @@ const pkg = require('../../package.json');
 const configVar = `${pkg.name.toUpperCase().replace(/-/g, '_')}_CONFIG_PATH`;
 const sleep = time => new Promise(resolve => setTimeout(() => resolve(), time));
 
-const args = process.env.UNSAFE_CI ?
+const args = (process.env.UNSAFE_CI || process.platform === 'linux') ?
   ['--no-sandbox', '--disable-setuid-sandbox', '.'] :
   ['.'];
 
@@ -130,8 +130,7 @@ const start = async (configPath = '') => {
     env: {
       // using all existing env variables is required for Linux
       ...process.env,
-      [configVar]: configPath,
-      LIBGL_ALWAYS_INDIRECT: 1
+      [configVar]: configPath
     }
   });
 
