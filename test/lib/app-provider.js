@@ -125,7 +125,7 @@ const start = async (configPath = '') => {
     _stop = null;
   };
 
-  await waitForThrowable(async () => {
+  const browserWSEndpoint = await waitForThrowable(async () => {
     await stopApp();
     await fs.remove(userData);
     await fs.ensureDir(userData);
@@ -168,28 +168,25 @@ const start = async (configPath = '') => {
 
     // watch for the logged message:
     // DevTools listening on ws://127.0.0.1:60030/devtools/browser/973afdb7-00af-4311-9663-c8833d51febb
-    await waitForThrowable(async () => {
+    // also make sure that we can connect to the debug port
+    return await waitForThrowable(async () => {
       const startedStr = stdchunks.map(c => c.toString()).join('').indexOf(`:${port}/devtools/`);
 
       if (startedStr < 0) {
         throw new Error('devtools not listening yet');
       }
-    }, { total: 3000 });
 
-  }, { count: 3 });
+      const res = await fetch(`http://localhost:${port}/json/version`);
 
-  let browserWSEndpoint;
+      if (!res.ok) {
+        throw new Error(`BAD /json/version respose: ${res.status} "${res.statusText}"`);
+      }
 
-  await waitForThrowable(async () => {
-    const res = await fetch(`http://localhost:${port}/json/version`);
+      const json = JSON.parse(await res.text());
 
-    if (!res.ok) {
-      throw new Error(`BAD /json/version respose: ${res.status} "${res.statusText}"`);
-    }
-
-    const json = JSON.parse(await res.text());
-    browserWSEndpoint = json.webSocketDebuggerUrl;
-  }, { total: 6000 });
+      return json.webSocketDebuggerUrl;
+    }, { total: 5000 });
+  }, { count: 3, total: Infinity });
 
   const { page, pages } = await waitForThrowable(async () => {
     if (browser) {
