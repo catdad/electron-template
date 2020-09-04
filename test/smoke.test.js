@@ -3,7 +3,7 @@ const { expect } = require('chai');
 const { start, stop } = require('./lib/app-provider.js');
 const config = require('./lib/config-provider.js');
 
-let c = 30; while (c--) describe('[smoke tests]', () => {
+describe('[smoke tests]', () => {
   const all = async (...promises) => {
     let err;
 
