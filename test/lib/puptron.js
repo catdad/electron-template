@@ -14,7 +14,6 @@ const once = async (ev, name) => await new Promise(r => ev.once(name, v => r(v))
 const launch = async (args, options) => {
   let app, browser, stopped = false;
   const userData = tempy.directory();
-  const port = await getPort();
   const stdchunks = [];
 
   const stopApp = async () => {
@@ -47,6 +46,8 @@ const launch = async (args, options) => {
     await stopApp();
     await fs.remove(userData);
     await fs.ensureDir(userData);
+
+    const port = await getPort();
 
     app = spawn(electron, [
       `--remote-debugging-port=${port}`,
@@ -108,8 +109,7 @@ const launch = async (args, options) => {
 
   await waitForThrowable(async () => {
     if (browser) {
-      await browser.disconnect();
-      browser = null;
+      await stopBrowser();
     }
 
     browser = await puppeteer.connect({ browserWSEndpoint, dumpio: true });
