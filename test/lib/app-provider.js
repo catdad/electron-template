@@ -4,7 +4,7 @@ const { expect } = require('chai');
 const chalk = require('chalk');
 
 const waitForThrowable = require('./wait-for-throwable.js');
-const { start, stop, getLogs } = require('./puptron.js');
+const { launch } = require('./puptron.js');
 
 const pkg = require('../../package.json');
 const configVar = `${pkg.name.toUpperCase().replace(/-/g, '_')}_CONFIG_PATH`;
@@ -47,26 +47,33 @@ const utils = page => ({
   }
 });
 
+let _browser;
+
 module.exports = {
   start: async (configPath = '') => {
-    const browser = await start(['.'], {
+    _browser = await launch(['.'], {
       cwd: path.resolve(__dirname, '../..'),
       env: {
         [configVar]: configPath
       }
     });
-    const pages = await browser.pages();
+
+    const pages = await _browser.pages();
 
     return {
       page: pages[0],
       pages,
-      browser,
+      browser: _browser,
       utils: utils(pages[0])
     };
   },
   stop: async (printLogs) => {
+    if (!_browser) {
+      return;
+    }
+
     if (printLogs) {
-      const logs = getLogs().map(str => {
+      const logs = _browser.getLogs().map(str => {
         const clean = str.replace(/^\[[0-9:/.]+INFO:CONSOLE\([0-9]+\)\]\s{0,}/, '');
 
         return clean === str ? chalk.yellow(str) : chalk.cyan(clean);
@@ -76,6 +83,6 @@ module.exports = {
       console.log(logs);
     }
 
-    await stop();
+    await _browser.close();
   }
 };

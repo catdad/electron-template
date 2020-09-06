@@ -9,22 +9,19 @@ const fs = require('fs-extra');
 const fetch = require('node-fetch');
 
 const waitForThrowable = require('./wait-for-throwable.js');
+const once = async (ev, name) => await new Promise(r => ev.once(name, v => r(v)));
 
-let _stop, _getLogs;
-
-const start = async (args, options) => {
+const launch = async (args, options) => {
   let app, browser, stopped = false;
   const userData = tempy.directory();
   const port = await getPort();
   const stdchunks = [];
 
-  _getLogs = () => [].concat(stdchunks).map(c => c.toString());
-
   const stopApp = async () => {
     if (app) {
       app.kill();
 
-      await new Promise(r => app.once('exit', () => r()));
+      await once(app, 'exit');
       app = null;
     }
   };
@@ -36,14 +33,14 @@ const start = async (args, options) => {
     }
   };
 
-  _stop = async () => {
+  const _getLogs = () => [].concat(stdchunks).map(c => c.toString());
+
+  const _stop = async () => {
     stopped = true;
 
     await stopBrowser();
     await stopApp();
     await fs.remove(userData);
-
-    _stop = null;
   };
 
   const browserWSEndpoint = await waitForThrowable(async () => {
@@ -73,7 +70,7 @@ const start = async (args, options) => {
       }
 
       /* eslint-disable-next-line no-console */
-      console.error('[electron process]', `exited with code: ${code}`);
+      console.error('Electron process unexpected exit:', `exited with code: ${code}`);
     });
     app.on('error', err => {
       if (stopped) {
@@ -81,7 +78,7 @@ const start = async (args, options) => {
       }
 
       /* eslint-disable-next-line no-console */
-      console.error('[electron process]', err);
+      console.error('Electron process unexpected error:', err);
     });
 
     app.stdout.on('data', chunk => stdchunks.push(chunk));
@@ -91,7 +88,7 @@ const start = async (args, options) => {
     // DevTools listening on ws://127.0.0.1:60030/devtools/browser/973afdb7-00af-4311-9663-c8833d51febb
     // also make sure that we can connect to the debug port
     return await waitForThrowable(async () => {
-      const startedStr = stdchunks.map(c => c.toString()).join('').indexOf(`:${port}/devtools/`);
+      const startedStr = _getLogs().join('').indexOf(`:${port}/devtools/`);
 
       if (startedStr < 0) {
         throw new Error('devtools not listening yet');
@@ -124,15 +121,26 @@ const start = async (args, options) => {
     }
   });
 
-  return browser;
+  return new Proxy(browser, {
+    get: (target, key, receiver) => {
+      if (key === 'close') {
+        return _stop;
+      }
+
+      if (key === 'getLogs') {
+        return _getLogs;
+      }
+
+      return Reflect.get(target, key, receiver);
+    },
+    set: (target, key, value, receiver) => {
+      if (['close', 'getLogs'].includes(key)) {
+        throw new Error(`cannot set read-only "${key}" property`);
+      }
+
+      Reflect.set(target, key, value, receiver);
+    }
+  });
 };
 
-const stop = async (...args) => {
-  if (_stop) {
-    await _stop(...args);
-  }
-};
-
-const getLogs = () => _getLogs ? _getLogs() : [];
-
-module.exports = { start, stop, getLogs };
+module.exports = { launch };
