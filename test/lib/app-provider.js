@@ -2,8 +2,8 @@ const path = require('path');
 
 const { expect } = require('chai');
 const chalk = require('chalk');
+const waitForThrowable = require('wait-for-throwable');
 
-const waitForThrowable = require('./wait-for-throwable.js');
 const { launch } = require('./puptron.js');
 
 const pkg = require('../../package.json');

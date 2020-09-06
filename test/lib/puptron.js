@@ -7,8 +7,8 @@ const tempy = require('tempy');
 const getPort = require('get-port');
 const fs = require('fs-extra');
 const fetch = require('node-fetch');
+const waitForThrowable = require('wait-for-throwable');
 
-const waitForThrowable = require('./wait-for-throwable.js');
 const once = async (ev, name) => await new Promise(r => ev.once(name, v => r(v)));
 
 const launch = async (args, options) => {
