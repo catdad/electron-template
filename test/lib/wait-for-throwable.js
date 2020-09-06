@@ -7,12 +7,12 @@ const waitForThrowable = async (func, { interval = 5, total = 2000, count = Infi
 
   while (Date.now() < end || c < count) {
     c += 1;
-    await sleep(interval);
 
     try {
       return await func();
     } catch (e) {
       error = e;
+      await sleep(interval);
     }
   }
 
