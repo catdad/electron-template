@@ -1,6 +1,7 @@
 const { spawn } = require('child_process');
 const path = require('path');
 
+const { expect } = require('chai');
 const puppeteer = require('puppeteer-core');
 const getPort = require('get-port');
 const electron = require('electron');
@@ -49,10 +50,7 @@ function isInView(containerBB, elBB) {
 
 const utils = page => ({
   waitForThrowable,
-  click: async selector => {
-    const elem = await page.$(selector);
-    await elem.click();
-  },
+  click: async selector => await page.click(selector),
   getText: async selector => {
     return await page.evaluate(s => document.querySelector(s).innerText, selector);
   },
@@ -70,12 +68,9 @@ const utils = page => ({
   waitForElementCount: async (selector, count = 1) => {
     await waitForThrowable(async () => {
       const elements = await page.$$(selector);
+      const errStr = `expected ${count} of element "${selector}" but found ${elements.length}`;
 
-      if (elements.length === count) {
-        return;
-      }
-
-      throw new Error(`expected ${count} of element "${selector}" but found ${elements.length}`);
+      expect(elements.length, errStr).to.equal(count);
     });
   }
 });
