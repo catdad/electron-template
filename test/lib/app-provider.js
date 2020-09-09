@@ -3,8 +3,7 @@ const path = require('path');
 const { expect } = require('chai');
 const chalk = require('chalk');
 const waitForThrowable = require('wait-for-throwable');
-
-const { launch } = require('./puptron.js');
+const { launch } = require('puptron');
 
 const pkg = require('../../package.json');
 const configVar = `${pkg.name.toUpperCase().replace(/-/g, '_')}_CONFIG_PATH`;
