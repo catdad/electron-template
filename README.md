@@ -36,38 +36,21 @@ A common problem in Electron apps is needing to communicate between the main and
 
 ## End-to-End Testing
 
-[`spectron`](https://www.npmjs.com/package/spectron) is included for testing, complete with helpers to start and stop the application, provide custom config, and print all logs when a test fails.
+This template comes with an [app provider](test/lib/app-provider.js) helper to start and stop the application, provide custom config, and print all logs when a test fails. This helper instruments the application using [`puppeteer`](https://github.com/puppeteer/puppeteer#readme), so you can do any end-user centric automation.
 
-`spectron` includes a copy of [`webdriverio`](https://github.com/webdriverio/webdriverio/) for actually driving the application. You can access it like this within the tests:
-
-```javascript
-app.client.$('.my-selector-class');
-```
-
-However, this is all asynchronous (`webdriverio` doesn't really do a good job documenting this). This presents some caveats:
+You can get access to the Puppeteer `browser` and default `page` objects like this:
 
 ```javascript
-// When webdriverio provides this example in the documentation:
-$(selector).getText();
+const { start, stop } = require('./lib/app-provider.js');
 
-// What you actually have to do is:
-const $elem = await app.client.$(selector);
-const text = await $elem.getText();
+(async () => {
+  const { browser, page, utils } = await start();
+})();
 ```
 
-This works in these tests. However, versions of [`webdriverio` 4](http://v4.webdriver.io/api.html) and earlier had a much better API for asynchronous code, that looked like this:
+While there are some helpers in the provided `utils` object, you can use any tooling built for testing using Puppeteer. I recommend the wonderful [`pptr-testing-library`](https://github.com/testing-library/pptr-testing-library).
 
-```javascript
-const text = await browser.getText(selector);
-```
-
-There is a helper in the tests available in this template that largely allows you to still write tests with this form of API, like so:
-
-```javascript
-const text = await app.legacy.getText(selector);
-```
-
-You get to choose which one you want to use! If ever in doubt, or something isn't working correctly, you should lean toward using `app.client` along with the official `webdriverio` documentation.
+Refer to the existing [smoke tests](test/smoke.test.js) for more examples for end-to-end testing.
 
 ## Unit testing
 
