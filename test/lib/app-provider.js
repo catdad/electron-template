@@ -56,13 +56,12 @@ module.exports = {
       }
     });
 
-    const pages = await _browser.pages();
+    const [page] = await _browser.pages();
 
     return {
-      page: pages[0],
-      pages,
+      page,
       browser: _browser,
-      utils: utils(pages[0])
+      utils: utils(page)
     };
   },
   stop: async (printLogs) => {
