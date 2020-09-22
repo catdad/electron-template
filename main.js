@@ -6,6 +6,7 @@ const events = new EventEmitter();
 const { app, BrowserWindow, ipcMain, systemPreferences } = require('electron');
 
 require('./lib/app-id.js')(app);
+const icon = require('./lib/icon.js');
 const log = require('./lib/log.js')('main');
 const config = require('./lib/config.js');
 const debounce = require('./lib/debounce.js');
@@ -58,6 +59,7 @@ function createWindow () {
         webviewTag: true,
         enableRemoteModule: true
       },
+      icon: icon(),
       frame: process.platform === 'darwin' ? true : !config.getProp('experiments.framelessWindow')
     };
 
