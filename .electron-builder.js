@@ -20,7 +20,7 @@ module.exports = {
     darkModeSupport: true
   },
   dmg: {
-    icon: 'icons/icon.icns',
+    icon,
     artifactName: `${fileName}-v\${version}-MacOS-setup.\${ext}`
   },
   win: {
