@@ -97,6 +97,17 @@ function createWindow () {
       config.setProp('window.height', size[1]);
     }, 500));
 
+    mainWindow.on('move', debounce(() => {
+      if (mainWindow.isMaximized() || mainWindow.isMinimized()) {
+        return;
+      }
+
+      const bounds = mainWindow.getBounds();
+
+      config.setProp('window.x', bounds.x);
+      config.setProp('window.y', bounds.y);
+    }, 500));
+
     mainWindow.on('maximize', () => {
       config.setProp('window.maximized', true);
     });
