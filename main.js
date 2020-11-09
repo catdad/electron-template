@@ -51,6 +51,8 @@ function createWindow () {
     const windowOptions = {
       width: config.getProp('window.width') || 1000,
       height: config.getProp('window.height') || 800,
+      x: config.getProp('window.x'),
+      y: config.getProp('window.y'),
       backgroundColor: '#121212',
       darkTheme: true,
       webPreferences: {
@@ -86,18 +88,7 @@ function createWindow () {
       mainWindow = null;
     });
 
-    mainWindow.on('resize', debounce(() => {
-      if (mainWindow.isMaximized() || mainWindow.isMinimized()) {
-        return;
-      }
-
-      const size = mainWindow.getSize();
-
-      config.setProp('window.width', size[0]);
-      config.setProp('window.height', size[1]);
-    }, 500));
-
-    mainWindow.on('move', debounce(() => {
+    const onBoundsChange = debounce(() => {
       if (mainWindow.isMaximized() || mainWindow.isMinimized()) {
         return;
       }
@@ -106,7 +97,12 @@ function createWindow () {
 
       config.setProp('window.x', bounds.x);
       config.setProp('window.y', bounds.y);
-    }, 500));
+      config.setProp('window.width', bounds.width);
+      config.setProp('window.height', bounds.height);
+    }, 500);
+
+    mainWindow.on('resize', onBoundsChange);
+    mainWindow.on('move', onBoundsChange);
 
     mainWindow.on('maximize', () => {
       config.setProp('window.maximized', true);
