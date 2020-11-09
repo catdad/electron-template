@@ -49,10 +49,10 @@ function createWindow () {
     config.read()
   ]).then(() => {
     const windowOptions = {
-      width: config.getProp('window.width') || 1000,
-      height: config.getProp('window.height') || 800,
       x: config.getProp('window.x'),
       y: config.getProp('window.y'),
+      width: config.getProp('window.width') || 1000,
+      height: config.getProp('window.height') || 800,
       backgroundColor: '#121212',
       darkTheme: true,
       webPreferences: {
