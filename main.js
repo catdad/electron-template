@@ -3,7 +3,7 @@ const url = require('url');
 const EventEmitter = require('events');
 const events = new EventEmitter();
 
-const { app, BrowserWindow, ipcMain, systemPreferences } = require('electron');
+const { app, BrowserWindow, ipcMain, screen, systemPreferences } = require('electron');
 
 require('./lib/app-id.js')(app);
 const icon = require('./lib/icon.js');
@@ -44,15 +44,30 @@ function onIpc(ev, data) {
   }
 }
 
+function getLocationOnExistingScreen() {
+  const x = config.getProp('window.x');
+  const y = config.getProp('window.y');
+  const width = config.getProp('window.width') || 1000;
+  const height = config.getProp('window.height') || 800;
+
+  for (const { bounds } of screen.getAllDisplays()) {
+    const xInBounds = x >= bounds.x && x <= bounds.x + bounds.width;
+    const yInBounds = y >= bounds.y && y <= bounds.y + bounds.height;
+
+    if (xInBounds && yInBounds) {
+      return { x, y, width, height };
+    }
+  }
+
+  return { width, height };
+}
+
 function createWindow () {
   Promise.all([
     config.read()
   ]).then(() => {
     const windowOptions = {
-      x: config.getProp('window.x'),
-      y: config.getProp('window.y'),
-      width: config.getProp('window.width') || 1000,
-      height: config.getProp('window.height') || 800,
+      ...getLocationOnExistingScreen(),
       backgroundColor: '#121212',
       darkTheme: true,
       webPreferences: {
