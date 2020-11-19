@@ -18,7 +18,7 @@ Let's get some easy things out of the way first. The very first thing you'll wan
 
 ## Source Code Build
 
-Right off the bat... there isn't one. And it's a good thing. I'm not going to go into the history of why I hate builds here, but I will just posit taht you don't need one. Electron is the most cutting-edge browser with every latest feature combines with the most recent NodeJS runtime, all rolled into a single environment. If there is something you actually need, it is already there. The code will you write will be the actual code that is executed.
+Right off the bat... there isn't one. And it's a good thing. I'm not going to go into the history of why I hate builds here, but I will just posit that you don't need one. Electron is the most cutting-edge browser with every latest feature combined with the most recent NodeJS runtime, all rolled into a single environment. If there is something you actually need, it is already there. The code you write will be the actual code that is executed.
 
 ## UI Framework
 
