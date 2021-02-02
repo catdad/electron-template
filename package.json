@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "callsites": "^3.1.0",
-    "fs-extra": "^9.0.1",
+    "fs-extra": "^9.1.0",
     "htm": "^3.0.4",
     "lodash": "^4.17.19",
     "preact": "^10.5.12",
