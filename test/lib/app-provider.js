@@ -20,9 +20,7 @@ function isInView(containerBB, elBB) {
 const utils = page => ({
   click: async selector => await page.click(selector),
   getRect: async selector => await page.evaluate(s => document.querySelector(s).getBoundingClientRect(), selector),
-  getText: async selector => {
-    return await page.evaluate(s => document.querySelector(s).innerText, selector);
-  },
+  getText: async selector => await page.evaluate(s => document.querySelector(s).innerText, selector),
   waitForVisible: async selector => {
     const { getRect } = utils(page);
     const pageRect = await getRect('body');
