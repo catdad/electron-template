@@ -10,6 +10,7 @@ module.exports = {
   files: [
     '!assets/*',
     '!scripts/*',
+    '!test/*',
     '!.*'
   ],
   mac: {
