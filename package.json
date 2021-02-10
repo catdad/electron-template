@@ -26,7 +26,12 @@
     "package:win32": "electron-builder --config .electron-builder.js --publish never --win",
     "package:darwin": "electron-builder --config .electron-builder.js --publish never --mac",
     "package:linux": "electron-builder --config .electron-builder.js --publish never --linux",
-    "package:default": "echo \"Error: this OS is not supported\" && exit 1"
+    "package:default": "echo \"Error: this OS is not supported\" && exit 1",
+    "package:dir": "run-script-os",
+    "package:dir:win32": "electron-builder --config .electron-builder.js --publish never --win dir",
+    "package:dir:darwin": "electron-builder --config .electron-builder.js --publish never --mac dir",
+    "package:dir:linux": "electron-builder --config .electron-builder.js --publish never --linux dir",
+    "package:dir:default": "echo \"Error: this OS is not supported\" && exit 1"
   },
   "devDependencies": {
     "chai": "^4.2.0",
