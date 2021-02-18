@@ -4,9 +4,20 @@ const { expect } = require('chai');
 const chalk = require('chalk');
 const waitForThrowable = require('wait-for-throwable');
 const { launch } = require('puptron');
+const root = require('rootrequire');
 
 const pkg = require('../../package.json');
 const configVar = `${pkg.name.toUpperCase().replace(/-/g, '_')}_CONFIG_PATH`;
+
+const distExecPath = ({
+  win32: path.resolve(root, 'dist/win-unpacked', `${pkg.productName}.exe`),
+  linux: path.resolve(root, 'dist/linux-unpacked', pkg.productName),
+  // note: this will only work if your app is signed or
+  // you have explicitly trusted your app already
+  darwin: path.resolve(root, 'dist/mac', `${pkg.productName}.app`)
+})[process.platform];
+
+const environment = process.env.TEST_UNPACKED ? 'production' : 'development';
 
 function isInView(containerBB, elBB) {
   return (!(
@@ -46,13 +57,21 @@ const utils = page => ({
 let _browser;
 
 module.exports = {
+  environment,
   start: async (configPath = '') => {
-    _browser = await launch(['.'], {
+
+    const launchOptions = {
       cwd: path.resolve(__dirname, '../..'),
       env: {
         [configVar]: configPath
       }
-    });
+    };
+
+    if (environment === 'production') {
+      launchOptions.execPath = distExecPath;
+    }
+
+    _browser = await launch(['.'], launchOptions);
 
     const [page] = await _browser.pages();
 

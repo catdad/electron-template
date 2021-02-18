@@ -19,6 +19,7 @@
     "start": "electron-background .",
     "dev": "electronmon .",
     "test": "mocha --timeout 30000 --slow 0 \"test/**/*.test.js\"",
+    "test:unpacked": "cross-env TEST_UNPACKED=1 npm test",
     "postinstall": "npm run -s prep:icons",
     "prep": "npm run -s prep:icons",
     "prep:icons": "svg-app-icon --destination icons < assets/icon.svg",
@@ -36,6 +37,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "chalk": "^4.1.0",
+    "cross-env": "^7.0.3",
     "electron": "^11.2.2",
     "electron-background": "^1.0.0",
     "electron-builder": "^22.9.1",
@@ -43,6 +45,7 @@
     "eslint": "^5.16.0",
     "mocha": "^8.2.1",
     "puptron": "0.0.5",
+    "rootrequire": "^1.0.0",
     "run-script-os": "^1.1.5",
     "svg-app-icon": "^1.1.0",
     "tempy": "^0.5.0",
