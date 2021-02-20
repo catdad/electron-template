@@ -1,5 +1,6 @@
 const { html, css, useContext, useState } = require('../tools/ui.js');
 const { withConfig, Config } = require('../tools/config.js');
+const is = require('../../lib/is.js');
 
 css('./App.css');
 
@@ -14,7 +15,8 @@ function App() {
 
   return html`
     <div class=app>
-      <p>This is your app</p>
+      <p class=label>This is your app</p>
+      <p class=environment>Environment: ${is.prod ? 'Production' : 'Development'}</p>
       <div><button onclick=${count}>I count how many times you click me, ever</button> : <span>${value}</span></div>
     </div>
   `;
