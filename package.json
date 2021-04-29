@@ -35,15 +35,15 @@
     "package:dir:default": "echo \"Error: this OS is not supported\" && exit 1"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
-    "chalk": "^4.1.0",
+    "chai": "^4.3.4",
+    "chalk": "^4.1.1",
     "cross-env": "^7.0.3",
-    "electron": "^11.2.2",
+    "electron": "^12.0.5",
     "electron-background": "^1.0.0",
-    "electron-builder": "^22.9.1",
-    "electronmon": "^1.1.2",
+    "electron-builder": "^22.10.5",
+    "electronmon": "^2.0.1",
     "eslint": "^5.16.0",
-    "mocha": "^8.2.1",
+    "mocha": "^8.3.2",
     "puptron": "0.0.5",
     "rootrequire": "^1.0.0",
     "run-script-os": "^1.1.5",
@@ -55,7 +55,7 @@
     "callsites": "^3.1.0",
     "fs-extra": "^9.1.0",
     "htm": "^3.0.4",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "preact": "^10.5.12",
     "toastify-js": "^1.8.0"
   }
