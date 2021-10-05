@@ -41,7 +41,7 @@
     "electron": "^12.0.5",
     "electron-background": "^1.0.0",
     "electron-builder": "^22.11.7",
-    "electronmon": "^2.0.1",
+    "electronmon": "^2.0.2",
     "eslint": "^5.16.0",
     "mocha": "^8.3.2",
     "puptron": "0.0.5",
