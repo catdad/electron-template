@@ -40,8 +40,8 @@
     "cross-env": "^7.0.3",
     "electron": "^12.0.5",
     "electron-background": "^1.0.0",
-    "electron-builder": "^22.10.5",
-    "electronmon": "^2.0.1",
+    "electron-builder": "^22.11.7",
+    "electronmon": "^2.0.2",
     "eslint": "^5.16.0",
     "mocha": "^8.3.2",
     "puptron": "0.0.5",
@@ -54,9 +54,9 @@
   "dependencies": {
     "callsites": "^3.1.0",
     "fs-extra": "^9.1.0",
-    "htm": "^3.0.4",
+    "htm": "^3.1.0",
     "lodash": "^4.17.21",
-    "preact": "^10.5.12",
+    "preact": "^10.5.14",
     "toastify-js": "^1.8.0"
   }
 }
