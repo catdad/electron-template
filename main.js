@@ -74,7 +74,6 @@ function createWindow () {
         nodeIntegration: true,
         nodeIntegrationInWorker: true,
         webviewTag: true,
-        enableRemoteModule: true,
         contextIsolation: false,
       },
       icon: icon(),
