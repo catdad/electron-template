@@ -22,7 +22,7 @@ Right off the bat... there isn't one. And it's a good thing. I'm not going to go
 
 ## UI Framework
 
-Lack of a code build doesn't keep us from using all new and familiar tools. This template already includes [Preact](https://preactjs.com/) to manage components and [htm](https://www.npmjs.com/package/htm) as a jsx alternative -- see the example in [App.js](renderer/App/App.js). Since it's Electron, you can use CSS [variables](https://css-tricks.com/guides/css-custom-properties/) and [functions](https://css-tricks.com/complete-guide-to-css-functions/). You can even manage CSS at the component leve, with a helper to include the CSS into the page.
+Lack of a code build doesn't keep us from using all new and familiar tools. This template already includes [Preact](https://preactjs.com/) to manage components and [htm](https://www.npmjs.com/package/htm) as a jsx alternative -- see the example in [App.js](renderer/App/App.js). Since it's Electron, you can use CSS [variables](https://css-tricks.com/guides/css-custom-properties/) and [functions](https://css-tricks.com/complete-guide-to-css-functions/). You can even manage CSS at the component level, with a helper to include the CSS into the page.
 
 ## Managing config
 
