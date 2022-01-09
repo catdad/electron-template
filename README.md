@@ -54,8 +54,8 @@ Refer to the existing [smoke tests](test/smoke.test.js) for more examples for en
 
 ## Unit testing
 
-There is no unit testing framework. Feel free to add any framework you are happy with. I recommend [`mocha`](https://www.npmjs.com/package/mocha), since it's already used to run the `spectron` tests.
+There is no unit testing framework. Feel free to add any framework you are happy with. I recommend [`mocha`](https://www.npmjs.com/package/mocha), since it's already used to run the end-to-end tests.
 
 ## CI Build
 
-This template comes with a [GitHub Actions](https://github.com/features/actions) workflow that will run your tests on Windows, MacOS, and Linux, create installers for all 3 operating systems, and provide them as artifacts on every build. When someone submits a pull request to your project, it will also do the same for the pull request. Whenever a tag is created, it will create a [GitHub Release](https://docs.github.com/en/enterprise/2.16/user/github/administering-a-repository/about-releases) and upload the all installers to that release. Basically... everything you might expect from a build.
+This template comes with a [GitHub Actions](https://github.com/features/actions) workflow that will run your tests on Windows, MacOS, and Linux, create installers for all 3 operating systems, and provide them as artifacts on every build. When someone submits a pull request to your project, it will also do the same for the pull request. Whenever a tag is created, it will create a [GitHub Release](https://docs.github.com/en/enterprise/2.16/user/github/administering-a-repository/about-releases) and upload all installers to that release. Basically... everything you might expect from a build.
