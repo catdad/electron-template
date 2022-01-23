@@ -43,6 +43,7 @@
     "electron-builder": "^22.11.7",
     "electronmon": "^2.0.2",
     "eslint": "^5.16.0",
+    "fs-extra": "^9.1.0",
     "mocha": "^8.3.2",
     "puptron": "0.0.5",
     "rootrequire": "^1.0.0",
@@ -54,7 +55,6 @@
   "dependencies": {
     "app-data-folder": "^1.0.0",
     "callsites": "^3.1.0",
-    "fs-extra": "^9.1.0",
     "htm": "^3.1.0",
     "lodash": "^4.17.21",
     "preact": "^10.5.14",
