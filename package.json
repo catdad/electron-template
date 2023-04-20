@@ -40,7 +40,7 @@
     "cross-env": "^7.0.3",
     "electron": "^24.1.2",
     "electron-background": "^1.0.0",
-    "electron-builder": "^22.11.7",
+    "electron-builder": "^23.6.0",
     "electronmon": "^2.0.2",
     "eslint": "^5.16.0",
     "fs-extra": "^9.1.0",
