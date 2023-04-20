@@ -21,7 +21,7 @@ module.exports = {
         'x64',
         'arm64'
       ],
-    }
+    },
     darkModeSupport: true
   },
   dmg: {
