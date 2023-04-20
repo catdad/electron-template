@@ -12,48 +12,48 @@ jobs:
   windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: 14.x
+          node-version: 14
       - run: npm install
       - run: npm test
       - run: npm run package
       - run: npm run test:unpacked
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: windows-artifacts
           path: dist/*.exe
   macos:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: 14.x
+          node-version: 14
       - run: npm install
       - run: npm test
       - run: npm run package
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: macos-artifacts
           path: dist/*.dmg
   linux:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: 14.x
+          node-version: 14
       - run: sudo apt-get install xvfb
       - run: npm install
       - run: xvfb-run --auto-servernum npm test
       - run: npm run package
       - run: xvfb-run --auto-servernum npm run test:unpacked
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: linux-artifacts
           path: dist/*.AppImage
@@ -62,7 +62,7 @@ jobs:
     needs: [ windows, macos, linux ]
     steps:
       - name: Download build artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           path: ./
       - name: Flatten artifacts
@@ -101,5 +101,5 @@ jobs:
                 release_id: release.data.id,
                 name: file,
                 data: await fs.readFile(`./${file}`)
-              });            
-            }          
+              });
+            }
