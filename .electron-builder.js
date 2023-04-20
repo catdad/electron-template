@@ -15,13 +15,13 @@ module.exports = {
   ],
   mac: {
     icon,
-    target: [
-      'dmg'
-    ],
-    arch: [
-      'x64',
-      'arm64'
-    ],
+    target: {
+      target: 'default',
+      arch: [
+        'x64',
+        'arm64'
+      ],
+    }
     darkModeSupport: true
   },
   dmg: {
