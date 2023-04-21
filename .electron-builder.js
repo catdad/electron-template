@@ -15,14 +15,18 @@ module.exports = {
   ],
   mac: {
     icon,
-    target: [
-      'dmg'
-    ],
+    target: {
+      target: 'default',
+      arch: [
+        'x64',
+        'arm64'
+      ],
+    },
     darkModeSupport: true
   },
   dmg: {
     icon,
-    artifactName: `${fileName}-v\${version}-MacOS.\${ext}`
+    artifactName: `${fileName}-v\${version}-MacOS-\${arch}.\${ext}`
   },
   win: {
     icon,
