@@ -44,7 +44,7 @@
     "electronmon": "^2.0.2",
     "eslint": "^5.16.0",
     "fs-extra": "^9.1.0",
-    "mocha": "^8.3.2",
+    "mocha": "^10.2.0",
     "puptron": "0.0.5",
     "rootrequire": "^1.0.0",
     "run-script-os": "^1.1.5",
