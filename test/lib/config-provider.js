@@ -1,4 +1,4 @@
-const fs = require('fs-extra');
+const fs = require('fs').promises;
 const tempy = require('tempy');
 
 const files = {};
@@ -13,7 +13,7 @@ const create = async configObj => {
 };
 
 const clean = async file => {
-  await fs.remove(file);
+  await fs.rm(file, { force: true });
   delete files[file];
 };
 
