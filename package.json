@@ -40,7 +40,7 @@
     "cross-env": "^7.0.3",
     "electron": "^28.2.3",
     "electron-background": "^1.0.0",
-    "electron-builder": "^24.9.1",
+    "electron-builder": "^24.13.3",
     "electronmon": "^2.0.2",
     "eslint": "^5.16.0",
     "mocha": "^10.3.0",
